@@ -11,6 +11,11 @@ namespace ScarlyCharter.Models
     [Table("REGION")]
     public partial class Region
     {
+        public Region()
+        {
+            Locations = new HashSet<Location>();
+        }
+
         [Key]
         [Column("Region_ID")]
         public int RegionId { get; set; }
@@ -22,5 +27,8 @@ namespace ScarlyCharter.Models
         [StringLength(30)]
         public string Fish { get; set; }
         public int? Season { get; set; }
+
+        [InverseProperty("Region")]
+        public virtual ICollection<Location> Locations { get; set; }
     }
 }

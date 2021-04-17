@@ -8,18 +8,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ScarlyCharter.Models
 {
-    [Keyless]
     [Table("SEASON")]
     public partial class Season
     {
+        [Key]
         [Column("Season_ID")]
         public int SeasonId { get; set; }
         [Required]
         [Column("Season_name")]
         [StringLength(30)]
         public string SeasonName { get; set; }
-        [Column("Guide_Available")]
-        [StringLength(30)]
-        public string GuideAvailable { get; set; }
     }
 }
