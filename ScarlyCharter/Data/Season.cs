@@ -6,11 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace ScarlyCharter.Models
+namespace ScarlyCharter.Data
 {
     [Table("SEASON")]
     public partial class Season
     {
+        public Season()
+        {
+            Guides = new HashSet<Guide>();
+            Regions = new HashSet<Region>();
+        }
+
         [Key]
         [Column("Season_ID")]
         public int SeasonId { get; set; }
@@ -18,5 +24,10 @@ namespace ScarlyCharter.Models
         [Column("Season_name")]
         [StringLength(30)]
         public string SeasonName { get; set; }
+
+        [InverseProperty(nameof(Guide.Season))]
+        public virtual ICollection<Guide> Guides { get; set; }
+        [InverseProperty(nameof(Region.Season))]
+        public virtual ICollection<Region> Regions { get; set; }
     }
 }

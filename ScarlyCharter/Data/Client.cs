@@ -6,11 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace ScarlyCharter.Models
+namespace ScarlyCharter.Data
 {
     [Table("CLIENT")]
     public partial class Client
     {
+        public Client()
+        {
+            BookedTrips = new HashSet<BookedTrip>();
+        }
+
         [Key]
         [Column("Client_ID")]
         public int ClientId { get; set; }
@@ -26,5 +31,8 @@ namespace ScarlyCharter.Models
         [Required]
         [StringLength(256)]
         public string Password { get; set; }
+
+        [InverseProperty(nameof(BookedTrip.Client))]
+        public virtual ICollection<BookedTrip> BookedTrips { get; set; }
     }
 }

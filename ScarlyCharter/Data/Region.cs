@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace ScarlyCharter.Models
+namespace ScarlyCharter.Data
 {
     [Table("REGION")]
     public partial class Region
     {
         public Region()
         {
-            Locations = new HashSet<Location>();
+            Guides = new HashSet<Guide>();
         }
 
         [Key]
@@ -23,12 +23,13 @@ namespace ScarlyCharter.Models
         [Column("Region_Name")]
         [StringLength(30)]
         public string RegionName { get; set; }
-        public int? Location { get; set; }
-        [StringLength(30)]
-        public string Fish { get; set; }
-        public int? Season { get; set; }
+        [Column("Season_ID")]
+        public int? SeasonId { get; set; }
 
-        [InverseProperty("Region")]
-        public virtual ICollection<Location> Locations { get; set; }
+        [ForeignKey(nameof(SeasonId))]
+        [InverseProperty("Regions")]
+        public virtual Season Season { get; set; }
+        [InverseProperty(nameof(Guide.Region))]
+        public virtual ICollection<Guide> Guides { get; set; }
     }
 }

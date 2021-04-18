@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ScarlyCharter.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ScarlyCharter.Data;
+using ScarlyCharter.Models;
 
 namespace ScarlyCharter.Controllers
 {
