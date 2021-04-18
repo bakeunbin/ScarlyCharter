@@ -6,29 +6,6 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome to Scarly Charter.</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Client_ID</th>
-                <th>Client_Name</th>
-                <th>Payment_Info</th>
-                <th>Username</th>
-                <th>Password</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var client in Clients)
-            {
-            <tr>
-                <td>@client.ClientId</td>
-                <td>@client.ClientName</td>
-                <td>@client.PaymentInfo</td>
-                <td>@client.Username</td>
-                <td>@client.Password</td>
-            </tr>
-            }
-        </tbody>
-    </table>
 </div>
