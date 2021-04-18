@@ -1,3 +1,3 @@
 # Use this command on Visual Studio's Package Manager console to auto-generate Models classes from the database.
-Scaffold-DbContext "Server=(localdb)\ProjectsV13;Database=DB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context "ApplicationDbContext" -DataAnnotations
+Scaffold-DbContext "Server=(localdb)\ProjectsV13;Database=DB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Context "ApplicationDbContext" -DataAnnotations -Force
 # Emtpy out ApplicationDbContext.cs and delete all Models classes except ErrorViewModel.cs and this text file before running the command.
