@@ -12,6 +12,6 @@ namespace ScarlyCharter.Models
 
         public string FishingStyle { get; set; }
 
-        public bool Overnight { get; set; }
+        public string Overnight { get; set; }
     }
 }

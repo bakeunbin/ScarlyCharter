@@ -34,7 +34,6 @@ namespace ScarlyCharter.Controllers
             return View ();
         }
 
-
         public IActionResult Search (string region, string season, string fish)
         {
             var db = new ApplicationDbContext ();
@@ -72,7 +71,7 @@ namespace ScarlyCharter.Controllers
                     Region = guide.Region.RegionName,
                     Season = guide.Season == null ? "All Seasons" : guide.Season.SeasonName,
                     FishingStyle = guide.FishingStyle,
-                    Overnight = guide.Overnight ?? false,
+                    Overnight = (guide.Overnight ?? false) ? "Yes" : "No",
                 });
             }
 

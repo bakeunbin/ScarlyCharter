@@ -1,3 +1,12 @@
+
+@using ScarlyCharter.Data;
+@{
+    ViewData ["Title"] = "Search";
+    var db = new ApplicationDbContext ();
+}
+
+<h1>@ViewData ["Title"]</h1>
+<hr />
 <form action="payment.cshtml">
     <label for="trips">Select A Trip</label>
     <select name="trips" id="trips">
