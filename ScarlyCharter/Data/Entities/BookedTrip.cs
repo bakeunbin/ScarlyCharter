@@ -16,12 +16,12 @@ namespace ScarlyCharter.Data
         public int TripId { get; set; }
         [Column("Client_ID")]
         public int ClientId { get; set; }
+        [Column("Guide_ID")]
+        public int GuideId { get; set; }
         [Column("Schedule_ID")]
         public int ScheduleId { get; set; }
         [Column("Location_ID")]
         public int LocationId { get; set; }
-        [Column("Guide_ID")]
-        public int GuideId { get; set; }
         [Column("Target_Fish_ID")]
         public int? TargetFishId { get; set; }
         [Column("Party_Size")]
@@ -33,6 +33,9 @@ namespace ScarlyCharter.Data
         [ForeignKey(nameof(ClientId))]
         [InverseProperty("BookedTrips")]
         public virtual Client Client { get; set; }
+        [ForeignKey(nameof(GuideId))]
+        [InverseProperty("BookedTrips")]
+        public virtual Guide Guide { get; set; }
         [ForeignKey(nameof(ScheduleId))]
         [InverseProperty("BookedTrips")]
         public virtual Schedule Schedule { get; set; }

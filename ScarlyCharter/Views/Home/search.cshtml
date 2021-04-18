@@ -1,0 +1,73 @@
+@using ScarlyCharter.Data;
+@model IEnumerable<ScarlyCharter.Models.SearchViewModel>
+@{
+    ViewData ["Title"] = "Search";
+    var db = new ApplicationDbContext ();
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+@using (Html.BeginForm ("Search", "Home", FormMethod.Get))
+{
+    <div class="container">
+        <div class="row">
+            <div class="input-group col-sm">
+                <label class="input-group-text" for="region">Region:</label>
+                <select class="custom-select" name="region" id="region">
+                    <option></option>
+                    @foreach (var region in db.Regions)
+                    {
+                        <option value="@region.RegionName">@region.RegionName</option>
+                    }
+                </select>
+            </div>
+            <div class="input-group col-sm">
+                <label class="input-group-text" for="season">Season:</label>
+                <select class="custom-select" name="season" id="season">
+                    <option value="All Seasons">All Seasons</option>
+                    @foreach (var season in db.Seasons)
+                    {
+                        <option value="@season.SeasonName">@season.SeasonName</option>
+                    }
+                </select>
+            </div>
+            <div class="input-group col-sm">
+                <label class="input-group-text" for="fish">Fish:</label>
+                <select class="custom-select" name="fish" id="fish">
+                    <option></option>
+                    @foreach (var fish in db.Fish)
+                    {
+                        <option value="@fish.FishName">@fish.FishName</option>
+                    }
+                </select>
+            </div>
+            <div class="input-group col-sm">
+                <input type="submit" value="search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Region</th>
+            <th>Season</th>
+            <th>Style</th>
+            <th>Overnight</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var guide in Model)
+        {
+            <tr>
+                <th>@guide.GuideName</th>
+                <th>@guide.Region</th>
+                <th>@guide.Season</th>
+                <th>@guide.FishingStyle</th>
+                <th>@guide.Overnight</th>
+             </tr>
+        }
+    </tbody>
+</table>

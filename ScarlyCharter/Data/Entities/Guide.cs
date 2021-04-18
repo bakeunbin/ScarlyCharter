@@ -11,6 +11,11 @@ namespace ScarlyCharter.Data
     [Table("GUIDE")]
     public partial class Guide
     {
+        public Guide()
+        {
+            BookedTrips = new HashSet<BookedTrip>();
+        }
+
         [Key]
         [Column("Guide_ID")]
         public int GuideId { get; set; }
@@ -19,7 +24,7 @@ namespace ScarlyCharter.Data
         [StringLength(30)]
         public string GuideName { get; set; }
         [Column("Region_ID")]
-        public int? RegionId { get; set; }
+        public int RegionId { get; set; }
         [Column("Season_ID")]
         public int? SeasonId { get; set; }
         [Column("Fishing_Style")]
@@ -33,5 +38,7 @@ namespace ScarlyCharter.Data
         [ForeignKey(nameof(SeasonId))]
         [InverseProperty("Guides")]
         public virtual Season Season { get; set; }
+        [InverseProperty(nameof(BookedTrip.Guide))]
+        public virtual ICollection<BookedTrip> BookedTrips { get; set; }
     }
 }

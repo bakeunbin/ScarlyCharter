@@ -13,7 +13,9 @@ namespace ScarlyCharter.Data
     {
         public Region()
         {
+            Fish = new HashSet<Fish>();
             Guides = new HashSet<Guide>();
+            Locations = new HashSet<Location>();
         }
 
         [Key]
@@ -29,7 +31,11 @@ namespace ScarlyCharter.Data
         [ForeignKey(nameof(SeasonId))]
         [InverseProperty("Regions")]
         public virtual Season Season { get; set; }
+        [InverseProperty("Region")]
+        public virtual ICollection<Fish> Fish { get; set; }
         [InverseProperty(nameof(Guide.Region))]
         public virtual ICollection<Guide> Guides { get; set; }
+        [InverseProperty(nameof(Location.Region))]
+        public virtual ICollection<Location> Locations { get; set; }
     }
 }
