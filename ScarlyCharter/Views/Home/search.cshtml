@@ -8,7 +8,7 @@
 
 <h1>@ViewData["Title"]</h1>
 <hr />
-@using (Html.BeginForm ("Search", "Home", FormMethod.Get))
+@using (Html.BeginForm ("BookTrip", "Home", FormMethod.Get))
 {
     <div class="container">
         <div class="row">
@@ -43,32 +43,37 @@
                 </select>
             </div>
             <div class="input-group col-sm">
-                <input type="submit" value="search" class="btn btn-primary" />
+                <input type="submit" value="Search" class="btn btn-primary" />
             </div>
         </div>
     </div>
 }
 <hr />
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Region</th>
-            <th>Season</th>
-            <th>Style</th>
-            <th>Overnight</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var guide in Model)
-        {
+@using (Html.BeginForm ("Schedule", "Home", FormMethod.Post))
+{
+    <table class="table">
+        <thead>
             <tr>
-                <th>@guide.GuideName</th>
-                <th>@guide.Region</th>
-                <th>@guide.Season</th>
-                <th>@guide.FishingStyle</th>
-                <th>@guide.Overnight</th>
-             </tr>
-        }
-    </tbody>
-</table>
+                <th>Name</th>
+                <th>Region</th>
+                <th>Season</th>
+                <th>Style</th>
+                <th>Overnight</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var guide in Model)
+            {
+                <tr>
+                    <th>@guide.GuideName</th>
+                    <th>@guide.Region</th>
+                    <th>@guide.Season</th>
+                    <th>@guide.FishingStyle</th>
+                    <th>@guide.Overnight</th>
+                    <th><input type="submit" value="Schedule" class="btn btn-primary" asp-controller="Home" asp-action="Schedule" asp-route-guide="@guide.GuideName" /></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

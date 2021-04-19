@@ -1,30 +1,129 @@
 
 @using ScarlyCharter.Data;
+@model ScarlyCharter.Models.ScheduleViewModel
 @{
-    ViewData ["Title"] = "Search";
+    ViewData ["Title"] = "Schedule a Trip";
     var db = new ApplicationDbContext ();
+
+    var clients = db.Clients.ToList ();
+    var guides = db.Guides.ToList ();
+    var locations = db.Locations.ToList ();
+    var fishes = db.Fish.ToList ();
+    var schedules = db.Schedules.ToList ();
 }
 
-<h1>@ViewData ["Title"]</h1>
+<h1>@ViewData["Title"]</h1>
+
 <hr />
-<form action="payment.cshtml">
-    <label for="trips">Select A Trip</label>
-    <select name="trips" id="trips">
-        <!--placeholder options, don't need these-->
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-    </select>
-    <p>Trip Info:</p>
-    <p>Lorem Ipsum</p>
-    <div />
-    <input type="submit" value="Enter" />
-</form>
-<p />
-<form action="main.cshtml">
-    <input type="submit" value="Back" />
-</form>
-<form action="search.cshtml">
-    <input type="submit" value="Advanced Search" />
-</form>
+@if (Model.Error == 1)
+{
+    <div class="alert alert-danger">
+        Invalid date-time format.
+    </div>
+}
+else if (Model.Error == 2)
+{
+    <div class="alert alert-danger">
+        Invalid party size.
+    </div>
+}
+<div class="container">
+    <div class="row">
+        @using (Html.BeginForm ("BookTrip", "Home", FormMethod.Get))
+        {
+            <div class="col">
+                <div class="input-group">
+                    <label class="input-group-text" for="guide">Guide:</label>
+                    <select class="custom-select show-menu-arrow" id="guidestr" name="guidestr" data-live-search="true">
+                        <option></option>
+                        @foreach (var guide in db.Guides)
+                        {
+                            if (guide.GuideName.Equals (Model.Guide))
+                            {
+                                <option data-tokens="@guide.GuideName" selected>@guide.GuideName</option>
+                            }
+                            else
+                            {
+                                <option data-tokens="@guide.GuideName">@guide.GuideName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <br />
+                <div class="input-group">
+                    <label class="input-group-text" for="location">Location:</label>
+                    <select class="custom-select show-menu-arrow" id="locationstr" name="locationstr" data-live-search="true">
+                        <option></option>
+                        @foreach (var location in db.Locations)
+                        {
+                            if (location.Availability ?? false)
+                            {
+                                <option data-tokens="@location.Type">@location.Type</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <br />
+                <div class="input-group">
+                    <label class="input-group-text" for="fish">Target Fish:</label>
+                    <select class="custom-select show-menu-arrow" id="fishstr" name="fishstr" data-live-search="true">
+                        <option></option>
+                        @foreach (var fish in db.Fish)
+                        {
+                            <option data-tokens="@fish.FishName">@fish.FishName</option>
+                        }
+                    </select>
+                </div>
+                <br />
+                <div class="input-group">
+                    <label class="input-group-text" for="partySize">Party Size:</label>
+                    <input class="form-control" id="partySize" name="partySize" type="number" />
+                </div>
+                <br />
+                <div class="input-group">
+                    <label class="input-group-text" for="datestr">Date:</label>
+                    <input class="form-control" id="datestr" name="datestr" placeholder="MM/DD/YYYY HH:MM" type="datetime" />
+                </div>
+                <br />
+                <div class="input-group text-center">
+                    <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                    <button class="btn btn-secondary btn-block" type="submit">Cancel</button>
+                </div>
+            </div>
+        }
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Guide</th>
+                        <th>Location</th>
+                        <th>Party Size</th>
+                        <th>Target Fish</th>
+                        <th>Schedule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trip in db.BookedTrips)
+                    {
+                        <tr>
+                            <th>@clients[trip.ClientId].ClientName</th>
+                            <th>@guides[trip.GuideId].GuideName</th>
+                            <th>@locations[trip.LocationId].Type</th>
+                            <th>@trip.PartySize</th>
+                            @if (trip.TargetFishId == null)
+                            {
+                                <th>None</th>
+                            }
+                            else
+                            {
+                                <th>@fishes[(int)trip.TargetFishId].FishName</th>
+                            }
+                            <th>@schedules[trip.ScheduleId].Date</th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
