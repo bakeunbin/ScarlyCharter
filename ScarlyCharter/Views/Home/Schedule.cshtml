@@ -36,7 +36,7 @@ else if (Model.Error == 2)
                     <label class="input-group-text" for="guide">Guide:</label>
                     <select class="custom-select show-menu-arrow" id="guidestr" name="guidestr" data-live-search="true">
                         <option></option>
-                        @foreach (var guide in db.Guides)
+                        @foreach (var guide in guides)
                         {
                             if (guide.GuideName.Equals (Model.Guide))
                             {
@@ -54,7 +54,7 @@ else if (Model.Error == 2)
                     <label class="input-group-text" for="location">Location:</label>
                     <select class="custom-select show-menu-arrow" id="locationstr" name="locationstr" data-live-search="true">
                         <option></option>
-                        @foreach (var location in db.Locations)
+                        @foreach (var location in locations)
                         {
                             if (location.Availability ?? false)
                             {
@@ -68,7 +68,7 @@ else if (Model.Error == 2)
                     <label class="input-group-text" for="fish">Target Fish:</label>
                     <select class="custom-select show-menu-arrow" id="fishstr" name="fishstr" data-live-search="true">
                         <option></option>
-                        @foreach (var fish in db.Fish)
+                        @foreach (var fish in fishes)
                         {
                             <option data-tokens="@fish.FishName">@fish.FishName</option>
                         }

@@ -4,6 +4,10 @@
 @{
     ViewData ["Title"] = "Search";
     var db = new ApplicationDbContext ();
+
+    var regions = db.Regions.ToList ();
+    var seasons = db.Seasons.ToList ();
+    var fishes = db.Fish.ToList ();
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -16,7 +20,7 @@
                 <label class="input-group-text" for="region">Region:</label>
                 <select class="custom-select" name="region" id="region">
                     <option></option>
-                    @foreach (var region in db.Regions)
+                    @foreach (var region in regions)
                     {
                         <option value="@region.RegionName">@region.RegionName</option>
                     }
@@ -26,7 +30,7 @@
                 <label class="input-group-text" for="season">Season:</label>
                 <select class="custom-select" name="season" id="season">
                     <option value="All Seasons">All Seasons</option>
-                    @foreach (var season in db.Seasons)
+                    @foreach (var season in seasons)
                     {
                         <option value="@season.SeasonName">@season.SeasonName</option>
                     }
@@ -36,7 +40,7 @@
                 <label class="input-group-text" for="fish">Fish:</label>
                 <select class="custom-select" name="fish" id="fish">
                     <option></option>
-                    @foreach (var fish in db.Fish)
+                    @foreach (var fish in fishes)
                     {
                         <option value="@fish.FishName">@fish.FishName</option>
                     }
