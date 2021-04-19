@@ -59,5 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Definition.sql" />
+    <None Include="Query.sql" />
   </ItemGroup>
 </Project>
