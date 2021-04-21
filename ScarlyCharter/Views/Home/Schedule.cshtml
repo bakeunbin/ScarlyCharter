@@ -3,6 +3,7 @@
 @model ScarlyCharter.Models.ScheduleViewModel
 @{
     ViewData ["Title"] = "Schedule a Trip";
+
     var db = new ApplicationDbContext ();
 
     var clients = db.Clients.ToList ();
@@ -10,12 +11,22 @@
     var locations = db.Locations.ToList ();
     var fishes = db.Fish.ToList ();
     var schedules = db.Schedules.ToList ();
+    var bookedTrips = db.BookedTrips.ToList ();
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-@if (Model.Error == 1)
+@if (Model.Error == null)
+{
+}
+else if (Model.Error == 0)
+{
+    <div class="alert alert-success">
+        Scheduled successfully.
+    </div>
+}
+else if (Model.Error == 1)
 {
     <div class="alert alert-danger">
         Invalid date-time format.
@@ -104,7 +115,7 @@ else if (Model.Error == 2)
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var trip in db.BookedTrips)
+                    @foreach (var trip in bookedTrips)
                     {
                         <tr>
                             <th>@clients[trip.ClientId].ClientName</th>
@@ -117,7 +128,7 @@ else if (Model.Error == 2)
                             }
                             else
                             {
-                                <th>@fishes[(int)trip.TargetFishId].FishName</th>
+                                <th>@fishes[(int) trip.TargetFishId].FishName</th>
                             }
                             <th>@schedules[trip.ScheduleId].Date</th>
                         </tr>

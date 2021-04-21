@@ -51,17 +51,23 @@ namespace ScarlyCharter.Controllers
 
             db.Schedules.Add (schedule);
 
-            var guide = (from g in db.Guides
+            var guide_cand = (from g in db.Guides
                          where g.GuideName.Equals (guidestr)
-                         select g).First ();
+                         select g);
 
-            var location = (from l in db.Locations
+            var guide = guide_cand.First ();
+
+            var location_cand = (from l in db.Locations
                             where l.Type == locationstr && l.RegionId == guide.RegionId
-                            select l).First ();
+                            select l);
 
-            var fish = (from f in db.Fish
+            var location = location_cand.First ();
+
+            var fish_cand = (from f in db.Fish
                         where f.FishName.Equals (fishstr)
-                        select f).First ();
+                        select f);
+
+            var fish = fish_cand.First ();
 
             var booked_trip = new BookedTrip
             {
@@ -87,10 +93,10 @@ namespace ScarlyCharter.Controllers
             var db = new ApplicationDbContext ();
             var model = new ScheduleViewModel
             {
-                Error = error ?? 0,
+                Error = error,
                 Guide = "",
                 Location = !string.IsNullOrEmpty (location) ? location : "",
-                PartySize = (int) (partySize != null ? partySize : 1),
+                PartySize = partySize != null ? (int) partySize : 1,
                 Date = !string.IsNullOrEmpty (date) ? date : ""
             };
 
