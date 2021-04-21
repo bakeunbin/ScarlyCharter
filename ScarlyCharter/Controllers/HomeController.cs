@@ -87,10 +87,10 @@ namespace ScarlyCharter.Controllers
             var db = new ApplicationDbContext ();
             var model = new ScheduleViewModel
             {
-                Error = error ?? 0,
+                Error = error,
                 Guide = "",
                 Location = !string.IsNullOrEmpty (location) ? location : "",
-                PartySize = (int) (partySize != null ? partySize : 1),
+                PartySize = partySize != null ? (int) partySize : 1,
                 Date = !string.IsNullOrEmpty (date) ? date : ""
             };
 
