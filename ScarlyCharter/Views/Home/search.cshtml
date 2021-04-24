@@ -1,8 +1,8 @@
-
+﻿
 @using ScarlyCharter.Data;
 @model IEnumerable<ScarlyCharter.Models.SearchViewModel>
 @{
-    ViewData ["Title"] = "Search";
+    ViewData["Title"] = "Search";
     var db = new ApplicationDbContext ();
 
     var regions = db.Regions.ToList ();

@@ -1,17 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ScarlyCharter.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ScarlyCharter.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ScarlyCharter
 {
@@ -28,18 +27,7 @@ namespace ScarlyCharter
         public void ConfigureServices (IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (Configuration.GetConnectionString ("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser> (options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext> ();
-            services.AddDatabaseDeveloperPageExceptionFilter ();
             services.AddControllersWithViews ();
-            services.Configure<IdentityOptions> (options =>
-            {
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequiredUniqueChars = 1;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +36,6 @@ namespace ScarlyCharter
             if (env.IsDevelopment ())
             {
                 app.UseDeveloperExceptionPage ();
-                app.UseMigrationsEndPoint ();
             }
             else
             {
@@ -61,7 +48,6 @@ namespace ScarlyCharter
 
             app.UseRouting ();
 
-            app.UseAuthentication ();
             app.UseAuthorization ();
 
             app.UseEndpoints (endpoints =>
@@ -69,7 +55,6 @@ namespace ScarlyCharter
                  endpoints.MapControllerRoute (
                      name: "default",
                      pattern: "{controller=Home}/{action=Index}/{id?}");
-                 endpoints.MapRazorPages ();
              });
         }
     }

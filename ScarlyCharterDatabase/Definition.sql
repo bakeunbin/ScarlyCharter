@@ -3,8 +3,10 @@ CREATE TABLE CLIENT (
 	Client_ID		INT				NOT NULL,
 	Client_Name		VARCHAR (30),
 	Payment_Info	VARCHAR (30),
+	Email			VARCHAR (128)	NOT NULL,
 	Username		VARCHAR (30)	NOT NULL,
-	Password		VARCHAR (256)	NOT NULL
+	Password		VARBINARY (256)	NOT NULL,
+	Salt			VARBINARY (256)	NOT NULL,
 );
 
 ALTER TABLE CLIENT ADD PRIMARY KEY (Client_ID);
@@ -88,10 +90,10 @@ ALTER TABLE BOOKED_TRIP ADD FOREIGN KEY (Target_Fish_ID) REFERENCES FISH (Fish_I
 
 GO
 
-INSERT INTO CLIENT VALUES (0, 'James Charlie', '4564239499330319' ,' jcharlie212', '********')
-INSERT INTO CLIENT VALUES (1, 'Laide Dineo', '4532333249302312' ,' dlaids229', '********')
-INSERT INTO CLIENT VALUES (2, 'Koali Green', '4522548299391231' , 'koaGreen1212', '********')
-INSERT INTO CLIENT VALUES (3, 'Holton Jeon', '4513425324623312' ,' jchhJeon4422', '********')
+INSERT INTO CLIENT VALUES (0, 'James Charlie', '4564239499330319', 'jcharlie212@yahoo.com', 'jcharlie212', CAST ('********' as VARBINARY(256)), CAST ('********' as VARBINARY(256)))
+INSERT INTO CLIENT VALUES (1, 'Laide Dineo', '4532333249302312', 'dlaids229@protonmail.com', 'dlaids229', CAST ('********' as VARBINARY(256)), CAST ('********' as VARBINARY(256)))
+INSERT INTO CLIENT VALUES (2, 'Koali Green', '4522548299391231', 'koaGreen1212@gmail.com', 'koaGreen1212', CAST ('********' as VARBINARY(256)), CAST ('********' as VARBINARY(256)))
+INSERT INTO CLIENT VALUES (3, 'Holton Jeon', '4513425324623312', ' jchhJeon4422@gmail.com', ' jchhJeon4422', CAST ('********' as VARBINARY(256)), CAST ('********' as VARBINARY(256)))
 
 -- (Season_ID, Season_Name)
 INSERT INTO SEASON VALUES (0, 'Spring') 
@@ -134,9 +136,9 @@ GO
 
 CREATE TRIGGER ON_CLIENT_REGISTER ON CLIENT AFTER INSERT
 AS 
-IF EXISTS (SELECT *
-		   FROM CLIENT AS C
-		   WHERE Username = C.Username)
+IF EXISTS (SELECT Username, Email
+		   FROM CLIENT AS C, inserted as i
+		   WHERE i.Username = C.Username)
 BEGIN
 	RAISERROR ('User already exists!', 1, 1);
 	ROLLBACK TRANSACTION;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 #nullable disable
 
@@ -27,11 +26,17 @@ namespace ScarlyCharter.Data
         [StringLength(30)]
         public string PaymentInfo { get; set; }
         [Required]
+        [StringLength(128)]
+        public string Email { get; set; }
+        [Required]
         [StringLength(30)]
         public string Username { get; set; }
         [Required]
-        [StringLength(256)]
-        public string Password { get; set; }
+        [MaxLength(256)]
+        public byte[] Password { get; set; }
+        [Required]
+        [MaxLength(256)]
+        public byte[] Salt { get; set; }
 
         [InverseProperty(nameof(BookedTrip.Client))]
         public virtual ICollection<BookedTrip> BookedTrips { get; set; }

@@ -31,7 +31,7 @@ namespace ScarlyCharter.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectsV13;Database=DB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectsV13;Database=ScarlyCharterDatabase;Trusted_Connection=True;");
             }
         }
 
@@ -42,7 +42,7 @@ namespace ScarlyCharter.Data
             modelBuilder.Entity<BookedTrip>(entity =>
             {
                 entity.HasKey(e => e.TripId)
-                    .HasName("PK__BOOKED_T__685272BE2EA383A9");
+                    .HasName("PK__BOOKED_T__685272BEC5F6E215");
 
                 entity.Property(e => e.TripId).ValueGeneratedNever();
 
@@ -51,17 +51,17 @@ namespace ScarlyCharter.Data
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.BookedTrips)
                     .HasForeignKey(d => d.ClientId)
-                    .HasConstraintName("FK__BOOKED_TR__Clien__4AD81681");
+                    .HasConstraintName("FK__BOOKED_TR__Clien__1E6F845E");
 
                 entity.HasOne(d => d.Guide)
                     .WithMany(p => p.BookedTrips)
                     .HasForeignKey(d => d.GuideId)
-                    .HasConstraintName("FK__BOOKED_TR__Guide__4BCC3ABA");
+                    .HasConstraintName("FK__BOOKED_TR__Guide__1F63A897");
 
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.BookedTrips)
                     .HasForeignKey(d => d.ScheduleId)
-                    .HasConstraintName("FK__BOOKED_TR__Sched__4CC05EF3");
+                    .HasConstraintName("FK__BOOKED_TR__Sched__2057CCD0");
             });
 
             modelBuilder.Entity<Client>(entity =>
@@ -70,7 +70,7 @@ namespace ScarlyCharter.Data
 
                 entity.Property(e => e.ClientName).IsUnicode(false);
 
-                entity.Property(e => e.Password).IsUnicode(false);
+                entity.Property(e => e.Email).IsUnicode(false);
 
                 entity.Property(e => e.PaymentInfo).IsUnicode(false);
 
@@ -86,13 +86,13 @@ namespace ScarlyCharter.Data
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Fish)
                     .HasForeignKey(d => d.RegionId)
-                    .HasConstraintName("FK__FISH__Region_ID__405A880E");
+                    .HasConstraintName("FK__FISH__Region_ID__13F1F5EB");
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Fish)
                     .HasForeignKey(d => d.SeasonId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__FISH__Season_ID__414EAC47");
+                    .HasConstraintName("FK__FISH__Season_ID__14E61A24");
             });
 
             modelBuilder.Entity<Guide>(entity =>
@@ -106,13 +106,13 @@ namespace ScarlyCharter.Data
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Guides)
                     .HasForeignKey(d => d.RegionId)
-                    .HasConstraintName("FK__GUIDE__Region_ID__46136164");
+                    .HasConstraintName("FK__GUIDE__Region_ID__19AACF41");
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Guides)
                     .HasForeignKey(d => d.SeasonId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__GUIDE__Season_ID__4707859D");
+                    .HasConstraintName("FK__GUIDE__Season_ID__1A9EF37A");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -124,7 +124,7 @@ namespace ScarlyCharter.Data
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Locations)
                     .HasForeignKey(d => d.RegionId)
-                    .HasConstraintName("FK__LOCATION___Regio__3D7E1B63");
+                    .HasConstraintName("FK__LOCATION___Regio__11158940");
             });
 
             modelBuilder.Entity<Region>(entity =>
@@ -136,7 +136,7 @@ namespace ScarlyCharter.Data
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Regions)
                     .HasForeignKey(d => d.SeasonId)
-                    .HasConstraintName("FK__REGION__Season_I__39AD8A7F");
+                    .HasConstraintName("FK__REGION__Season_I__0D44F85C");
             });
 
             modelBuilder.Entity<Schedule>(entity =>
