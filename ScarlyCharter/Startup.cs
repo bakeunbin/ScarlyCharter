@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ScarlyCharter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ScarlyCharter
 {
@@ -27,6 +28,7 @@ namespace ScarlyCharter
         public void ConfigureServices (IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (Configuration.GetConnectionString ("DefaultConnection")));
+            services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme).AddCookie ();
             services.AddControllersWithViews ();
         }
 
@@ -43,12 +45,14 @@ namespace ScarlyCharter
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts ();
             }
+
             app.UseHttpsRedirection ();
             app.UseStaticFiles ();
 
             app.UseRouting ();
 
             app.UseAuthorization ();
+            app.UseAuthentication ();
 
             app.UseEndpoints (endpoints =>
              {
