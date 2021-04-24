@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ScarlyCharter.Data;
 using ScarlyCharter.Models;
-using System.Globalization;
 
 namespace ScarlyCharter.Controllers
 {
@@ -35,26 +35,138 @@ namespace ScarlyCharter.Controllers
             return View ();
         }
 
-        public IActionResult Logout ()
-        {
-            return View ();
-        }
-
         [HttpGet]
-        public IActionResult Login (string returnUrl = "")
+        public IActionResult Login (string returnUrl = null)
         {
             return View (new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         [HttpGet]
-        public IActionResult Register (string returnUrl = "")
+        public IActionResult Register (string returnUrl = null)
         {
             return View (new RegisterViewModel { ReturnUrl = returnUrl });
+        }
+
+        public IActionResult Logout ()
+        {
+            return View ();
         }
 
         public IActionResult ForgotPassword ()
         {
             return View ();
+        }
+
+        private readonly int SaltSize = 256;
+        private readonly int HashSize = 256;
+        private readonly int Iterations = 120000;
+
+        private bool SlowEquals (byte [] a, byte [] b)
+        {
+            int res = a.Length ^ b.Length;
+
+            for (int i = 0 ; i < Math.Min (a.Length, b.Length) ; i++)
+                res |= a [i] ^ b [i];
+
+            return res == 0;
+        }
+
+        [HttpPost]
+        public IActionResult Login (LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var db = new ApplicationDbContext ();
+                var clients = db.Clients.ToList ();
+                var clientc = from c in clients
+                              where c.Username.Equals (model.Username)
+                              select c;
+
+                if (clientc.Any ())
+                {
+                    var client = clientc.First ();
+                    var pbkdf2 = new Rfc2898DeriveBytes (model.Password, client.Salt, Iterations);
+                    var hash = pbkdf2.GetBytes (HashSize);
+
+                    if (SlowEquals (hash, client.Password))
+                    {
+                        if (!string.IsNullOrEmpty (model.ReturnUrl) && Url.IsLocalUrl (model.ReturnUrl))
+                            return Redirect (model.ReturnUrl);
+                        else
+                            return RedirectToAction ("Index", "Home");
+                    }
+                }
+            }
+
+            ModelState.AddModelError (string.Empty, "Either user doesn't exists or wrong password.");
+            return View (model);
+        }
+
+        [HttpPost]
+        public IActionResult Register (RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var db = new ApplicationDbContext ();
+                var clients = db.Clients.ToList ();
+                var clientc = from c in clients
+                              where c.Username.Equals (model.Username)
+                              select c;
+
+                if (clientc.Any ())
+                {
+                    ModelState.AddModelError (string.Empty, "Invalid username.");
+                    return View (model);
+                }
+
+                clientc = from c in clients
+                          where c.Email.Equals (model.Email)
+                          select c;
+
+                if (clientc.Any ())
+                {
+                    ModelState.AddModelError (string.Empty, "Email already used.");
+                    return View (model);
+                }
+
+                var salt = new byte [SaltSize];
+                var provider = new RNGCryptoServiceProvider ();
+
+                provider.GetBytes (salt);
+
+                var pbkdf2a = new Rfc2898DeriveBytes (model.Password, salt, Iterations);
+                var pbkdf2b = new Rfc2898DeriveBytes (model.Password, salt, Iterations);
+                var passhash = pbkdf2a.GetBytes (HashSize);
+                var confhash = pbkdf2b.GetBytes (HashSize);
+
+                if (!SlowEquals (passhash, confhash))
+                {
+                    ModelState.AddModelError (string.Empty, "Passwords do not match!");
+                    return View (model);
+                }
+
+                var client = new Client
+                {
+                    ClientId = clients.Count,
+                    ClientName = model.Name,
+                    PaymentInfo = model.PaymentInfo,
+                    Email = model.Email,
+                    Username = model.Username,
+                    Password = passhash,
+                    Salt = salt
+                };
+
+                db.Clients.Add (client);
+                db.SaveChanges ();
+
+                if (!string.IsNullOrEmpty (model.ReturnUrl) && Url.IsLocalUrl (model.ReturnUrl))
+                    return Redirect (model.ReturnUrl);
+                else
+                    return RedirectToAction ("Index", "Home");
+            }
+
+            ModelState.AddModelError (string.Empty, "Registration failed.");
+            return View (model);
         }
 
         public IActionResult BookTrip (string guidestr, string locationstr, string fishstr, int partySize, string datestr)
