@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScarlyCharter.Data;
 using ScarlyCharter.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Threading.Tasks;
 
 namespace ScarlyCharter.Controllers
 {
@@ -47,9 +51,10 @@ namespace ScarlyCharter.Controllers
             return View (new RegisterViewModel { ReturnUrl = returnUrl });
         }
 
-        public IActionResult Logout ()
+        public async Task<IActionResult> Logout ()
         {
-            return View ();
+            await HttpContext.SignOutAsync (CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction ("Index", "Home");
         }
 
         public IActionResult ForgotPassword ()
@@ -72,7 +77,7 @@ namespace ScarlyCharter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login (LoginViewModel model)
+        public async Task<IActionResult> Login (LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -90,6 +95,22 @@ namespace ScarlyCharter.Controllers
 
                     if (SlowEquals (hash, client.Password))
                     {
+                        var claims = new List<Claim>
+                        {
+                            new Claim (ClaimTypes.Name, client.Email),
+                            new Claim ("FullName", client.ClientName)
+                        };
+
+                        await HttpContext.SignInAsync (
+                            CookieAuthenticationDefaults.AuthenticationScheme, 
+                            new ClaimsPrincipal (new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme)), 
+                            new AuthenticationProperties
+                            {
+                                AllowRefresh = true,
+                                IsPersistent = model.RememberMe
+                            }
+                        );
+
                         if (!string.IsNullOrEmpty (model.ReturnUrl) && Url.IsLocalUrl (model.ReturnUrl))
                             return Redirect (model.ReturnUrl);
                         else

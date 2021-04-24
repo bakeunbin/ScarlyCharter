@@ -1,5 +1,8 @@
-﻿<ul class="navbar-nav">
-    @if (false)
+﻿
+@using System.Security.Claims
+
+<ul class="navbar-nav">
+    @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Account" title="Manage">Hello @User.Identity.Name!</a>
