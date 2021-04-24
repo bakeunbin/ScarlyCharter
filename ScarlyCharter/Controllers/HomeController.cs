@@ -46,9 +46,10 @@ namespace ScarlyCharter.Controllers
             return View (new LoginViewModel { ReturnUrl = returnUrl });
         }
 
-        public IActionResult Register ()
+        [HttpGet]
+        public IActionResult Register (string returnUrl = "")
         {
-            return View ();
+            return View (new RegisterViewModel { ReturnUrl = returnUrl });
         }
 
         public IActionResult ForgotPassword ()

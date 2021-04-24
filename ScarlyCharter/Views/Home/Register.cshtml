@@ -1,0 +1,55 @@
+﻿
+@model ScarlyCharter.Models.RegisterViewModel
+@{
+    ViewData ["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PaymentInfo"></label>
+                    <input asp-for="PaymentInfo" class="form-control" />
+                    <span asp-validation-for="PaymentInfo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-controller="Home" asp-action="Login" asp-route-returnurl="@Model.ReturnUrl">Already a registered user?</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

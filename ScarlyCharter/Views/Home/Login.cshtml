@@ -34,10 +34,10 @@
                 </div>
                 <div class="form-group">
                     <p>
-                        <a asp-controller="Account" asp-action="ForgotPassword">Forgot password?</a>
+                        <a asp-controller="Home" asp-action="ForgotPassword">Forgot password?</a>
                     </p>
                     <p>
-                        <a asp-controller="Account" asp-action="Register">Register as a new user</a>
+                        <a asp-controller="Home" asp-action="Register" asp-route-returnurl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
                 </div>
             </form>

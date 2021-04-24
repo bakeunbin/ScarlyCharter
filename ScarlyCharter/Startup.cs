@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ScarlyCharter.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ScarlyCharter
 {
