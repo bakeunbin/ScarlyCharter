@@ -30,6 +30,32 @@ namespace ScarlyCharter.Controllers
             return View ();
         }
 
+        public IActionResult Account ()
+        {
+            return View ();
+        }
+
+        public IActionResult Logout ()
+        {
+            return View ();
+        }
+
+        [HttpGet]
+        public IActionResult Login (string returnUrl = "")
+        {
+            return View (new LoginViewModel { ReturnUrl = returnUrl });
+        }
+
+        public IActionResult Register ()
+        {
+            return View ();
+        }
+
+        public IActionResult ForgotPassword ()
+        {
+            return View ();
+        }
+
         public IActionResult BookTrip (string guidestr, string locationstr, string fishstr, int partySize, string datestr)
         {
             DateTime parsed;
@@ -52,20 +78,20 @@ namespace ScarlyCharter.Controllers
             db.Schedules.Add (schedule);
 
             var guide_cand = (from g in db.Guides
-                         where g.GuideName.Equals (guidestr)
-                         select g);
+                              where g.GuideName.Equals (guidestr)
+                              select g);
 
             var guide = guide_cand.First ();
 
             var location_cand = (from l in db.Locations
-                            where l.Type == locationstr && l.RegionId == guide.RegionId
-                            select l);
+                                 where l.Type == locationstr && l.RegionId == guide.RegionId
+                                 select l);
 
             var location = location_cand.First ();
 
             var fish_cand = (from f in db.Fish
-                        where f.FishName.Equals (fishstr)
-                        select f);
+                             where f.FishName.Equals (fishstr)
+                             select f);
 
             var fish = fish_cand.First ();
 
@@ -103,8 +129,8 @@ namespace ScarlyCharter.Controllers
             if (!string.IsNullOrEmpty (guide))
             {
                 var gid = (from g in db.Guides
-                          where g.GuideName.Equals (guide)
-                          select g).First ();
+                           where g.GuideName.Equals (guide)
+                           select g).First ();
 
                 model.Guide = guide;
             }

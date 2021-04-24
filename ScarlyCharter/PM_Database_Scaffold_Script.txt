@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=(localdb)\ProjectsV13;Database=ScarlyCharterDatabase;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Context "ApplicationDbContext" -DataAnnotations -Force

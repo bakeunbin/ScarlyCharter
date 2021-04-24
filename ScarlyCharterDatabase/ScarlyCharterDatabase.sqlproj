@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>DB</Name>
+    <Name>ScarlyCharterDatabase</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{ef422793-c991-4fe5-bfae-e5254f861a8f}</ProjectGuid>
+    <ProjectGuid>{f820c50d-fe71-431d-87fd-300a90141082}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>DB</RootNamespace>
-    <AssemblyName>DB</AssemblyName>
+    <RootNamespace>ScarlyCharterDatabase</RootNamespace>
+    <AssemblyName>ScarlyCharterDatabase</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
