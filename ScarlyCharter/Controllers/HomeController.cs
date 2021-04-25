@@ -250,6 +250,11 @@ namespace ScarlyCharter.Controllers
 
         public IActionResult Schedule (string guide, string location, int? partySize, string date, int? error)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction ("Login", "Home", new { returnUrl = "/Home/Schedule" });
+            }
+
             var db = new ApplicationDbContext ();
             var model = new ScheduleViewModel
             {
