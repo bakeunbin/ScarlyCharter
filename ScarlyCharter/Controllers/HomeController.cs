@@ -101,6 +101,9 @@ namespace ScarlyCharter.Controllers
                             new Claim ("FullName", client.ClientName)
                         };
 
+                        if (client.Username.Equals ("bseebb"))
+                            claims.Add (new Claim (ClaimTypes.Role, "Administrator"));
+
                         await HttpContext.SignInAsync (
                             CookieAuthenticationDefaults.AuthenticationScheme, 
                             new ClaimsPrincipal (new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme)), 
