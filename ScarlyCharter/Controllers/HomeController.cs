@@ -86,12 +86,17 @@ namespace ScarlyCharter.Controllers
                 var clientc = from c in clients
                               where c.Username.Equals (model.Username)
                               select c;
+                var salt = new byte [SaltSize];
+
+                if (clientc.Any ())
+                    salt = clientc.First ().Salt;
+
+                var pbkdf2 = new Rfc2898DeriveBytes (model.Password, salt, Iterations);
+                var hash = pbkdf2.GetBytes (HashSize);
 
                 if (clientc.Any ())
                 {
                     var client = clientc.First ();
-                    var pbkdf2 = new Rfc2898DeriveBytes (model.Password, client.Salt, Iterations);
-                    var hash = pbkdf2.GetBytes (HashSize);
 
                     if (SlowEquals (hash, client.Password))
                     {
@@ -103,6 +108,8 @@ namespace ScarlyCharter.Controllers
 
                         if (client.Username.Equals ("bseebb"))
                             claims.Add (new Claim (ClaimTypes.Role, "Administrator"));
+                        else
+                            claims.Add (new Claim (ClaimTypes.Role, "Client"));
 
                         await HttpContext.SignInAsync (
                             CookieAuthenticationDefaults.AuthenticationScheme, 

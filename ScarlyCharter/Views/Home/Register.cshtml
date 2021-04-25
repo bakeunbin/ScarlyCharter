@@ -10,7 +10,7 @@
     <div class="col-md-4">
         <section>
             <form asp-controller="Home" asp-action="Register" asp-route-returnurl="@Model.ReturnUrl" method="post">
-                <div asp-validation-summary="All" class="alert alert-danger"></div>
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Name"></label>
                     <input asp-for="Name" class="form-control" />
