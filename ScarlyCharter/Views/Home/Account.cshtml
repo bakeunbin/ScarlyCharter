@@ -1,8 +1,61 @@
 ﻿
+@using ScarlyCharter.Data;
 @{
     ViewData ["Title"] = "Hello, " + User.Identity.Name;
+
+    var db = new ApplicationDbContext ();
+    var clients = db.Clients.ToList ();
+    var client = (from c in clients
+                  where c.Email.Equals (User.Identity.Name)
+                  select c).First ();
 }
 
 <h1>@ViewData["Title"]</h1>
 <hr />
-
+<div asp-validation-summary="All" class="text-danger"></div>
+@using (Html.BeginForm ("Account", "Home", FormMethod.Post))
+{
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md input-group">
+                <label class="input-group-text" for="name">Name:</label>
+                <input class="form-control" type="text" name="name" id="name" value="@client.ClientName" />
+            </div>
+            <div class="col-md input-group">
+                <label class="input-group-text" for="email">E-Mail:</label>
+                <input class="form-control" type="text" name="email" id="email" value="@client.Email" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md input-group">
+                <label class="input-group-text" for="username">Username:</label>
+                <input class="form-control" type="text" name="username" id="username" value="@client.Username" />
+            </div>
+            <div class="col-md input-group">
+                <label class="input-group-text" for="cpassword">Current Password:</label>
+                <input class="form-control" type="password" name="cpassword" id="cpassword" value="" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md input-group">
+                <label class="input-group-text" for="npassword">New Password:</label>
+                <input class="form-control" type="password" name="npassword" id="npassword" value="" />
+            </div>
+            <div class="col-md input-group">
+                <label class="input-group-text" for="cnpassword">Confirm Password:</label>
+                <input class="form-control" type="password" name="cnpassword" id="cnpassword" value="" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md input-group">
+                <input class="btn btn-primary" type="submit" value="Save" asp-route-clientid="@client.ClientId" />
+            </div>
+            <div class="col-md input-group">
+                <input class="btn btn-danger" type="submit" value="Delete Account" asp-controller="Home" asp-action="DeleteAccount" asp-route-clientid="@client.ClientId" />
+            </div>
+        </div>
+    </div>
+}

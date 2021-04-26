@@ -34,8 +34,94 @@ namespace ScarlyCharter.Controllers
             return View ();
         }
 
-        public IActionResult Account ()
+        public async Task<IActionResult> DeleteAccount (int clientId)
         {
+            var db = new ApplicationDbContext ();
+            var clients = db.Clients.ToList ();
+            db.Clients.Remove ((from c in clients
+                                where c.ClientId == clientId
+                                select c).First ());
+            await db.SaveChangesAsync ();
+            await HttpContext.SignOutAsync ();
+            return RedirectToAction ("Index", "Home");
+        }
+
+        public IActionResult Account (int? clientId, string name, string email, string username, string cpassword, string npassword, string cnpassword)
+        {
+            if (clientId != null)
+            {
+                var db = new ApplicationDbContext ();
+                var clients = db.Clients.ToList ();
+                var client = (from c in clients
+                              where c.ClientId == clientId
+                              select c).First ();
+
+                var nclient = new Client
+                {
+                    ClientId = (int) clientId,
+                    ClientName = client.ClientName,
+                    PaymentInfo = client.PaymentInfo,
+                    Email = client.Email,
+                    Username = client.Username,
+                    Password = client.Password,
+                    Salt = client.Salt
+                };
+
+                if (!string.IsNullOrEmpty (name))
+                    nclient.ClientName = name;
+                if (!string.IsNullOrEmpty (email))
+                    nclient.Email = email;
+                if (!string.IsNullOrEmpty (username))
+                    nclient.Username = username;
+
+                if (string.IsNullOrEmpty (cpassword) && (!string.IsNullOrEmpty (npassword) || !string.IsNullOrEmpty (cnpassword)))
+                {
+                    ModelState.AddModelError (string.Empty, "Must provide current password to change password.");
+                    return View ();
+                }
+                else if (!string.IsNullOrEmpty (npassword) != !string.IsNullOrEmpty (cnpassword))
+                {
+                    ModelState.AddModelError (string.Empty, "Must provide new password and confirming new password.");
+                    return View ();
+                }
+                else if (!string.IsNullOrEmpty (npassword) && !string.IsNullOrEmpty (cnpassword))
+                {
+                    var osalt = client.Salt;
+                    var nsalt = new byte [SaltSize];
+
+                    var pbkdf2_c = new Rfc2898DeriveBytes (cpassword, osalt, Iterations);
+                    var hash = pbkdf2_c.GetBytes (HashSize);
+
+                    if (!SlowEquals (hash, client.Password))
+                    {
+                        ModelState.AddModelError (string.Empty, "Wrong current password.");
+                        return View ();
+                    }
+
+                    var provider = new RNGCryptoServiceProvider ();
+
+                    provider.GetBytes (nsalt);
+
+                    var pbkdf2_n = new Rfc2898DeriveBytes (npassword, nsalt, Iterations);
+                    var pbkdf2_cn = new Rfc2898DeriveBytes (cnpassword, nsalt, Iterations);
+
+                    hash = pbkdf2_n.GetBytes (HashSize);
+
+                    if (!SlowEquals (hash, pbkdf2_cn.GetBytes (HashSize)))
+                    {
+                        ModelState.AddModelError (string.Empty, "Passwords do not match!");
+                        return View ();
+                    }
+
+                    nclient.Password = hash;
+                    nclient.Salt = nsalt;
+                }
+
+                db.Remove (client);
+                db.Add (nclient);
+                db.SaveChanges ();
+            }
+
             return View ();
         }
 
