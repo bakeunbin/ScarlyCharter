@@ -46,7 +46,7 @@ namespace ScarlyCharter.Controllers
             return RedirectToAction ("Index", "Home");
         }
 
-        public IActionResult Account (int? clientId, string name, string email, string username, string cpassword, string npassword, string cnpassword)
+        public async Task<IActionResult> Account (int? clientId, string name, string email, string username, string cpassword, string npassword, string cnpassword)
         {
             if (clientId != null)
             {
@@ -119,7 +119,7 @@ namespace ScarlyCharter.Controllers
 
                 db.Remove (client);
                 db.Add (nclient);
-                db.SaveChanges ();
+                await db.SaveChangesAsync ();
             }
 
             return View ();
